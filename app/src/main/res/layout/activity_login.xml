@@ -1,16 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
+    android:fillViewport="true"
     android:background="#D7CFCF">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login Screen"
-        android:textSize="24sp"
-        android:textColor="#000000" />
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
 
-</LinearLayout>
+        <!-- App Logo - exact size from spec -->
+        <ImageView
+            android:id="@+id/logo_image"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="40dp"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="Daily FOT Logo" />
+
+        <!-- Username Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:fontFamily="sans-serif"
+            android:textColor="#000000"
+            android:layout_marginBottom="8dp"
+            android:gravity="center" />
+
+        <!-- Username Input - exact dimensions from spec -->
+        <EditText
+            android:id="@+id/username_input"
+            android:layout_width="284dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="24dp"
+            android:hint="Enter your name"
+            android:textColorHint="#737373"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@drawable/input_field_background_spec"
+            android:inputType="text"
+            android:maxLines="1"
+            android:gravity="start|center_vertical" />
+
+        <!-- Password Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:fontFamily="sans-serif"
+            android:textColor="#000000"
+            android:layout_marginBottom="8dp"
+            android:gravity="center" />
+
+        <!-- Password Input Container - exact dimensions -->
+        <RelativeLayout
+            android:layout_width="284dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="40dp">
+
+            <EditText
+                android:id="@+id/password_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Enter your Password"
+                android:textColorHint="#737373"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:paddingStart="16dp"
+                android:paddingEnd="50dp"
+                android:background="@drawable/input_field_background_spec"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:gravity="start|center_vertical" />
+
+            <ImageView
+                android:id="@+id/password_toggle"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_eye_off_spec"
+                android:contentDescription="Toggle password visibility"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </RelativeLayout>
+
+        <!-- Login Button - exact dimensions and color -->
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="281dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="32dp"
+            android:text="Login"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            android:background="@drawable/login_button_background_spec"
+            android:textAllCaps="false" />
+
+        <!-- Sign Up Link -->
+        <TextView
+            android:id="@+id/signup_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account? Sign Up"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:fontFamily="sans-serif"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+</ScrollView>

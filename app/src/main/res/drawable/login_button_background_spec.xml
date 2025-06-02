@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Pressed state - slightly darker -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#1976D2" />
+            <stroke android:width="1dp" android:color="#000000" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+
+    <!-- Normal state - exact blue from your spec -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#2196F3" />
+            <stroke android:width="1dp" android:color="#000000" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+
+</selector>
