@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.DailyFOT" parent="Base.Theme.DailyFOT" />
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#D7CFCF</item>
+        <item name="android:statusBarColor">#D7CFCF</item>
+        <item name="android:navigationBarColor">#D7CFCF</item>
+    </style>
 </resources>
