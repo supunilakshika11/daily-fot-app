@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    File: signout_button_background.xml
+    Location: app/src/main/res/drawable/signout_button_background.xml
+
+    WHAT THIS DOES:
+    Creates the red rounded background for the "Sign-out" button
+    Red color indicates this is a "destructive" action (logging out)
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Red background color (indicates warning/logout action) -->
+    <solid android:color="#E74C3C" />
+
+    <!-- Rounded corners (same as edit button for consistency) -->
+    <corners android:radius="24dp" />
+
+</shape>

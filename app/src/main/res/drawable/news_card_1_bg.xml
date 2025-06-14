@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Golden/brown gradient for Noor Feast theme -->
+    <gradient
+        android:startColor="#8B4513"
+        android:endColor="#DAA520"
+        android:angle="45" />
+
+    <!-- Rounded corners -->
+    <corners android:radius="12dp" />
+
+</shape>

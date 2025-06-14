@@ -1,33 +1,404 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:background="#FFFFFF">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- Top Header Section -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+        <!-- Back Arrow (Hidden but kept for code compatibility) -->
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back"
+            android:clickable="false"
+            android:focusable="false"
+            android:visibility="gone" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <!-- Hi, User Text -->
+        <TextView
+            android:id="@+id/greeting_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hi, User"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#3C1A9A"
+            android:fontFamily="sans-serif" />
 
-    <include layout="@layout/content_main" />
+        <!-- User Profile Icon -->
+        <ImageView
+            android:id="@+id/user_profile_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_user_profile"
+            android:contentDescription="User Profile"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            android:focusable="true" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
+        <!-- Notification Icon -->
+        <ImageView
+            android:id="@+id/notification_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_notification"
+            android:contentDescription="Notifications"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+    <!-- Search Bar -->
+    <LinearLayout
+        android:layout_width="368dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:background="@drawable/search_bar_background"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <!-- Menu Icon -->
+        <ImageView
+            android:id="@+id/menu_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_menu"
+            android:contentDescription="Menu"
+            android:layout_marginEnd="12dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Search Input -->
+        <EditText
+            android:id="@+id/search_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Search here..."
+            android:textColorHint="#999999"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif" />
+
+        <!-- Search Icon -->
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_search"
+            android:contentDescription="Search"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+    <!-- News Cards Container -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- News Card 1 - Noor Feast with Real Image -->
+            <RelativeLayout
+                android:id="@+id/news_card_1"
+                android:layout_width="368dp"
+                android:layout_height="156dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/news_card_rounded_corner"
+                android:clipToOutline="true"
+                android:clickable="true"
+                android:focusable="true">
+
+                <!-- Background Image -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/one"
+                    android:scaleType="centerCrop" />
+
+                <!-- Dark Overlay for better text readability -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#40000000" />
+
+                <!-- Date Badge -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="12dp"
+                    android:background="#80000000"
+                    android:padding="6dp"
+                    android:fontFamily="sans-serif" />
+
+                <!-- Title and Read More -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Read more..."
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Title\ngoes\nhere"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <!-- News Card 2 - International Dance Day with Real Image -->
+            <RelativeLayout
+                android:id="@+id/news_card_2"
+                android:layout_width="368dp"
+                android:layout_height="156dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/news_card_rounded_corner"
+                android:clipToOutline="true"
+                android:clickable="true"
+                android:focusable="true">
+
+                <!-- Background Image -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/two"
+                    android:scaleType="centerCrop" />
+
+                <!-- Dark Overlay for better text readability -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#40000000" />
+
+                <!-- Date Badge -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="12dp"
+                    android:background="#80000000"
+                    android:padding="6dp"
+                    android:fontFamily="sans-serif" />
+
+                <!-- Title -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Title\ngoes\nhere"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="12dp"
+                    android:fontFamily="sans-serif" />
+
+            </RelativeLayout>
+
+            <!-- News Card 3 - Sinhala Event with Real Image -->
+            <RelativeLayout
+                android:id="@+id/news_card_3"
+                android:layout_width="368dp"
+                android:layout_height="156dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/news_card_rounded_corner"
+                android:clipToOutline="true"
+                android:clickable="true"
+                android:focusable="true">
+
+                <!-- Background Image -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/three"
+                    android:scaleType="centerCrop" />
+
+                <!-- Dark Overlay for better text readability -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#40000000" />
+
+                <!-- Date Badge -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="12dp"
+                    android:background="#80000000"
+                    android:padding="6dp"
+                    android:fontFamily="sans-serif" />
+
+                <!-- Title -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Title\ngoes\nhere"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="12dp"
+                    android:fontFamily="sans-serif" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#F0F0F0"
+        android:padding="16dp"
+        android:gravity="center">
+
+        <!-- Sport Tab -->
+        <LinearLayout
+            android:id="@+id/sport_tab"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_sport"
+                android:contentDescription="Sport" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sport"
+                android:textSize="12sp"
+                android:textColor="#333333"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif" />
+
+        </LinearLayout>
+
+        <!-- Education Tab -->
+        <LinearLayout
+            android:id="@+id/education_tab"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_education"
+                android:contentDescription="Education" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Education"
+                android:textSize="12sp"
+                android:textColor="#333333"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif" />
+
+        </LinearLayout>
+
+        <!-- Event Tab -->
+        <LinearLayout
+            android:id="@+id/event_tab"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_event"
+                android:contentDescription="Event" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event"
+                android:textSize="12sp"
+                android:textColor="#333333"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

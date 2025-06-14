@@ -122,24 +122,21 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // For demo purposes - show success message
+        // Show success message
         Toast.makeText(this, "Login successful! Welcome " + username, Toast.LENGTH_SHORT).show();
 
-        // TODO: Add real authentication here
-        // TODO: Navigate to main news screen
-        // Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        // startActivity(intent);
-        // finish();
+        // Navigate to main news screen
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("username", username); // Pass username to MainActivity
+        startActivity(intent);
+        finish(); // Close login screen so user can't go back with back button
     }
 
     /**
-     * Handle sign up link click
+     * Handle sign up link click - Navigate to SignupActivity
      */
     private void handleSignupClick() {
-        Toast.makeText(this, "Sign up screen coming soon!", Toast.LENGTH_SHORT).show();
-
-        // TODO: Navigate to signup screen
-        // Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-        // startActivity(intent);
+        Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+        startActivity(intent);
     }
 }

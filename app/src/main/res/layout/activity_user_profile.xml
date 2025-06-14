@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This is the main layout file for the User Information screen -->
+<!-- It defines how everything looks - buttons, text, images, etc. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
+
+    <!-- TOP HEADER BAR with back arrow and title -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF">
+
+        <!-- Back Arrow - takes user back to previous screen -->
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Screen Title -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="User Information"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:gravity="center"
+            android:fontFamily="sans-serif" />
+
+        <!-- Empty space for symmetry (balances the back arrow) -->
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+    </LinearLayout>
+
+    <!-- MAIN CONTENT AREA - scrollable content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:gravity="center_horizontal">
+
+            <!-- PROFILE PICTURE SECTION -->
+            <!-- This creates the circular profile picture area with camera icon -->
+            <RelativeLayout
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="48dp">
+
+                <!-- Large white circle background for profile picture -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/profile_circle_background" />
+
+                <!-- Profile Picture (hidden by default, will show when user adds photo) -->
+                <ImageView
+                    android:id="@+id/profile_picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <!-- Small camera icon in bottom-right corner -->
+                <ImageView
+                    android:id="@+id/camera_icon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_camera"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/camera_icon_background"
+                    android:padding="6dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Change Profile Picture" />
+
+            </RelativeLayout>
+
+            <!-- USER INFORMATION HEADER -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USER INFORMATION"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#6C63FF"
+                android:fontFamily="sans-serif"
+                android:layout_marginBottom="32dp" />
+
+            <!-- NAME FIELD -->
+            <!-- Shows "Name: [Username]" -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp"
+                android:gravity="center_vertical">
+
+                <!-- "Name:" label -->
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="Name:"
+                    android:textSize="16sp"
+                    android:textColor="#6C63FF"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif" />
+
+                <!-- Actual username will be displayed here -->
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="User"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginStart="16dp" />
+
+            </LinearLayout>
+
+            <!-- EMAIL FIELD -->
+            <!-- Shows "E-mail: [Email or blank]" -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="48dp"
+                android:gravity="center_vertical">
+
+                <!-- "E-mail:" label -->
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:text="E-mail:"
+                    android:textSize="16sp"
+                    android:textColor="#6C63FF"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif" />
+
+                <!-- Email will be shown here (blank by default as requested) -->
+                <TextView
+                    android:id="@+id/user_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textColor="#666666"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginStart="16dp"
+                    android:hint="Not provided"
+                    android:textColorHint="#999999" />
+
+            </LinearLayout>
+
+            <!-- BUTTONS SECTION -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <!-- BLUE "Edit Info" BUTTON -->
+                <Button
+                    android:id="@+id/edit_info_button"
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:text="Edit Info"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/edit_button_background"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <!-- RED "Sign-out" BUTTON -->
+                <Button
+                    android:id="@+id/signout_button"
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:text="Sign-out"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/signout_button_background"
+                    android:fontFamily="sans-serif"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

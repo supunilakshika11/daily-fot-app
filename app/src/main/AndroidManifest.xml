@@ -26,11 +26,20 @@
             android:name=".LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.DailyFOT" />
+
+        <activity
+            android:name=".SignupActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.DailyFOT" >
-        </activity>
+            android:exported="false" />
+        <activity
+            android:name=".EventNewsActivity"
+            android:exported="false" />
+        <!-- User Profile Activity - User Information Screen -->
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

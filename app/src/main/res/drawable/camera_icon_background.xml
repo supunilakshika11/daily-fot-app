@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    File: camera_icon_background.xml
+    Location: app/src/main/res/drawable/camera_icon_background.xml
+
+    WHAT THIS DOES:
+    Creates a small dark gray circle background for the camera icon
+    This makes the white camera icon visible and clickable
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- Dark gray background for camera icon -->
+    <solid android:color="#666666" />
+
+</shape>

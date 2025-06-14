@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    File: profile_circle_background.xml
+    Location: app/src/main/res/drawable/profile_circle_background.xml
+
+    WHAT THIS DOES:
+    Creates a large white circle with a gray border for the profile picture area
+    When user doesn't have a profile picture, they see this white circle
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- White background fill -->
+    <solid android:color="#FFFFFF" />
+
+    <!-- Gray border around the circle -->
+    <stroke
+        android:width="2dp"
+        android:color="#E0E0E0" />
+
+</shape>
