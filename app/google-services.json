@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "196631276452",
+    "project_id": "dailyfot-662fb",
+    "storage_bucket": "dailyfot-662fb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196631276452:android:7ec447e9e9c332bac0ef31",
+        "android_client_info": {
+          "package_name": "com.example.dailyfot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIyk39Y2ySRrrEbCor-OvaZsiDaCWWjmY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

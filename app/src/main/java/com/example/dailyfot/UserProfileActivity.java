@@ -1,6 +1,6 @@
 package com.example.dailyfot;
 
-// These are imports - they tell Java what tools we need to use
+// Original imports
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,19 +11,27 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AlertDialog;
 
+// Firebase imports
+import androidx.annotation.NonNull;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 /**
  * UserProfileActivity - This class manages the User Information screen
  *
  * WHAT THIS CLASS DOES:
- * 1. Shows user information (name, email)
+ * 1. Shows user information (name, email) from Firebase
  * 2. Handles button clicks (Edit Info, Sign-out, Back arrow)
  * 3. Manages navigation to other screens
- * 4. Loads user data passed from other activities
+ * 4. Loads user data from Firebase Authentication
  */
 public class UserProfileActivity extends AppCompatActivity {
 
-    // STEP 1: Declare UI components (connect to XML elements)
-    // These variables will connect to the views in your XML file
+    // UI components (connect to XML elements)
     private ImageView backArrow;        // Back arrow button
     private ImageView profilePicture;   // Profile picture (circular image)
     private ImageView cameraIcon;       // Camera icon for changing profile picture
@@ -32,36 +40,47 @@ public class UserProfileActivity extends AppCompatActivity {
     private Button editInfoButton;      // Blue "Edit Info" button
     private Button signoutButton;       // Red "Sign-out" button
 
-    // STEP 2: Variables to store user data
+    // User data variables
     private String currentUserName;     // Stores the user's name
     private String currentUserEmail;    // Stores the user's email
 
+    // Firebase variables
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private FirebaseUser currentUser;
+
     /**
      * onCreate - This method runs when the screen first loads
-     * Think of it like the "setup" function for your screen
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // STEP 3: Connect this Java file to the XML layout
         setContentView(R.layout.activity_user_profile);
 
-        // STEP 4: Connect Java variables to XML elements
+        // Initialize Firebase
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        // Check if user is logged in
+        if (currentUser == null) {
+            // User not logged in, redirect to login
+            navigateToLogin();
+            return;
+        }
+
+        // Connect Java variables to XML elements
         initializeViews();
 
-        // STEP 5: Load user data (name from login, email blank)
-        loadUserData();
+        // Load user data from Firebase
+        loadUserDataFromFirebase();
 
-        // STEP 6: Set up what happens when buttons are clicked
+        // Set up what happens when buttons are clicked
         setupClickListeners();
     }
 
     /**
-     * STEP 4 DETAILS: Connect Java variables to XML elements
-     *
-     * This method finds each element in your XML file and connects it
-     * to a Java variable so you can control it with code
+     * Connect Java variables to XML elements
      */
     private void initializeViews() {
         // Find each element by its ID and connect to Java variables
@@ -75,41 +94,73 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * STEP 5 DETAILS: Load user data
-     *
-     * This method gets the username from the previous screen (MainActivity)
-     * and sets up the email field as blank (as you requested)
+     * Load user data from Firebase or Intent fallback
      */
-    private void loadUserData() {
-        // Get data passed from the previous screen
+    private void loadUserDataFromFirebase() {
+        // First try to get data from intent (fallback)
         Intent intent = getIntent();
-
-        // GET USERNAME (from login screen via MainActivity)
         currentUserName = intent.getStringExtra("username");
-        if (currentUserName != null && !currentUserName.isEmpty()) {
-            // If we have a username, show it
-            userName.setText(currentUserName);
+
+        if (currentUser != null) {
+            // Use Firebase user data
+            String email = currentUser.getEmail();
+            if (email != null) {
+                currentUserEmail = email;
+                // Extract username from email if not provided in intent
+                if (currentUserName == null || currentUserName.isEmpty()) {
+                    currentUserName = email.contains("@") ? email.substring(0, email.indexOf("@")) : "User";
+                }
+            }
+
+            // Try to load additional data from Firestore (optional)
+            loadUserDataFromFirestore();
         } else {
-            // If no username, show "User" as default
-            userName.setText("User");
-            currentUserName = "User";
+            // Fallback to intent data if no Firebase user
+            currentUserEmail = intent.getStringExtra("email");
         }
 
-        // SET EMAIL AS BLANK (as you requested)
-        // Email is not collected during registration, so it starts empty
-        currentUserEmail = intent.getStringExtra("email");
-        if (currentUserEmail != null && !currentUserEmail.isEmpty()) {
-            userEmail.setText(currentUserEmail);
-        } else {
-            userEmail.setText(""); // Blank by default
-            currentUserEmail = "";
-        }
+        // Set display values
+        userName.setText(currentUserName != null ? currentUserName : "User");
+        userEmail.setText(currentUserEmail != null ? currentUserEmail : "");
     }
 
     /**
-     * STEP 6 DETAILS: Set up button click actions
-     *
-     * This method tells each button what to do when clicked
+     * Load additional user data from Firestore database
+     */
+    private void loadUserDataFromFirestore() {
+        if (currentUser == null) return;
+
+        db.collection("users").document(currentUser.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                // Document exists, load data from Firestore
+                                String firestoreUsername = document.getString("username");
+                                String firestoreEmail = document.getString("email");
+
+                                if (firestoreUsername != null && !firestoreUsername.isEmpty()) {
+                                    currentUserName = firestoreUsername;
+                                    userName.setText(currentUserName);
+                                }
+
+                                if (firestoreEmail != null && !firestoreEmail.isEmpty()) {
+                                    currentUserEmail = firestoreEmail;
+                                    userEmail.setText(currentUserEmail);
+                                }
+                            }
+                            // If document doesn't exist, keep the current display values
+                        }
+                        // If failed to load from Firestore, keep the current display values
+                    }
+                });
+    }
+
+    /**
+     * Set up button click actions
      */
     private void setupClickListeners() {
 
@@ -156,22 +207,16 @@ public class UserProfileActivity extends AppCompatActivity {
 
     /**
      * CAMERA ICON CLICK - Change profile picture
-     *
-     * For now, this just shows a message. In the future, you can add
-     * functionality to let users select photos from gallery or take pictures
      */
     private void handleCameraClick() {
         Toast.makeText(this, "Profile picture change coming soon!", Toast.LENGTH_SHORT).show();
 
         // TODO FOR FUTURE: Add photo selection functionality
-        // Example: Open gallery, crop image, save as profile picture
+        // Example: Open gallery, crop image, save as profile picture to Firebase Storage
     }
 
     /**
      * EDIT INFO BUTTON CLICK - Edit user profile
-     *
-     * For now, this shows a message. In the future, you can create
-     * an edit profile screen where users can change their name and email
      */
     private void handleEditInfoClick() {
         Toast.makeText(this, "Edit profile coming soon!", Toast.LENGTH_SHORT).show();
@@ -182,9 +227,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     /**
      * SIGN-OUT BUTTON CLICK - Log out user
-     *
-     * This shows a confirmation dialog, and if user confirms,
-     * it logs them out and returns to the login screen
      */
     private void handleSignoutClick() {
         // Show confirmation dialog before signing out
@@ -203,32 +245,33 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     /**
-     * ACTUAL SIGN-OUT PROCESS
-     *
-     * This method handles the actual sign-out process:
-     * 1. Shows success message
-     * 2. Navigates back to login screen
-     * 3. Clears the activity stack so user can't go back
+     * Perform Firebase sign out
      */
     private void performSignOut() {
+        // Sign out from Firebase
+        if (mAuth != null) {
+            mAuth.signOut();
+        }
+
         // Show success message
         Toast.makeText(this, "Signed out successfully", Toast.LENGTH_SHORT).show();
 
-        // Navigate back to login screen
-        Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
-
-        // Clear all previous activities so user can't go back after logout
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        startActivity(intent);
-        finish(); // Close this activity
+        // Navigate to login screen
+        navigateToLogin();
     }
 
     /**
-     * PUBLIC METHOD: Update user information
-     *
-     * This method allows other activities to update the user information
-     * displayed on this screen (useful for future edit profile functionality)
+     * Navigate to login screen
+     */
+    private void navigateToLogin() {
+        Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * Update user information (for future use)
      */
     public void updateUserInfo(String name, String email) {
         if (name != null && !name.isEmpty()) {
@@ -239,6 +282,28 @@ public class UserProfileActivity extends AppCompatActivity {
         if (email != null) {
             currentUserEmail = email;
             userEmail.setText(email.isEmpty() ? "" : email);
+        }
+
+        // TODO FOR FUTURE: Update data in Firestore as well
+        // Map<String, Object> updates = new HashMap<>();
+        // updates.put("username", name);
+        // updates.put("email", email);
+        // if (currentUser != null) {
+        //     db.collection("users").document(currentUser.getUid()).update(updates);
+        // }
+    }
+
+    /**
+     * Check user authentication status when activity resumes
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Check if user is still logged in
+        if (mAuth.getCurrentUser() == null) {
+            // User was signed out elsewhere, redirect to login
+            navigateToLogin();
         }
     }
 }

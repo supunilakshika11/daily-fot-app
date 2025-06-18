@@ -203,6 +203,13 @@
             android:clickable="true"
             android:focusable="true" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 </ScrollView>
