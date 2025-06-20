@@ -2,17 +2,23 @@ package com.example.dailyfot; // Replace with your actual package name
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import android.widget.RelativeLayout;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     // UI components
     private ImageView backArrow;
@@ -29,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout educationTab;
     private LinearLayout eventTab;
 
+    // Navigation Drawer components
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+
+    // Firebase
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize UI components
         initializeViews();
+
+        // Set up navigation drawer
+        setupNavigationDrawer();
 
         // Set up click listeners
         setupClickListeners();
@@ -61,6 +77,67 @@ public class MainActivity extends AppCompatActivity {
         sportTab = findViewById(R.id.sport_tab);
         educationTab = findViewById(R.id.education_tab);
         eventTab = findViewById(R.id.event_tab);
+
+        // Navigation Drawer components
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+
+        // Firebase
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    /**
+     * Set up navigation drawer functionality
+     */
+    private void setupNavigationDrawer() {
+        // Set up navigation item selected listener
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // Update navigation header with user info
+        updateNavigationHeader();
+    }
+
+    /**
+     * Update navigation header with user information
+     */
+    private void updateNavigationHeader() {
+        View headerView = navigationView.getHeaderView(0);
+        TextView navHeaderName = headerView.findViewById(R.id.nav_header_name);
+
+        // Get username from intent or use default
+        Intent intent = getIntent();
+        String username = "User";
+        if (intent != null && intent.getStringExtra("username") != null) {
+            username = intent.getStringExtra("username");
+        }
+
+        // Only set the name, no fake email
+        navHeaderName.setText(username);
+    }
+
+    /**
+     * Handle navigation menu item selections
+     */
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.nav_home) {
+            // Already on home screen
+            Toast.makeText(this, "You're already on Home", Toast.LENGTH_SHORT).show();
+        } else if (itemId == R.id.nav_profile) {
+            handleUserProfileClick();
+        } else if (itemId == R.id.nav_developer) {
+            handleDeveloperInfoClick();
+        } else if (itemId == R.id.nav_settings) {
+            handleSettingsClick();
+        } else if (itemId == R.id.nav_sign_out) {
+            handleSignOutClick();
+        }
+
+        // Close drawer after selection
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     /**
@@ -91,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Menu icon click
+        // Menu icon click - Open navigation drawer
         menuIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +230,93 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Handle back button press
+     */
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * Handle menu icon click - Open navigation drawer
+     */
+    private void handleMenuClick() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
+
+    /**
+     * Handle developer info click
+     */
+    private void handleDeveloperInfoClick() {
+        Intent intent = new Intent(MainActivity.this, DeveloperInfoActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Handle settings click
+     */
+    private void handleSettingsClick() {
+        Toast.makeText(this, "Settings screen coming soon!", Toast.LENGTH_SHORT).show();
+
+        // TODO: Create SettingsActivity
+        // Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        // startActivity(intent);
+    }
+
+    /**
+     * Handle sign out click - SAME AS UserProfileActivity
+     */
+    private void handleSignOutClick() {
+        // Show confirmation dialog before signing out
+        new AlertDialog.Builder(this)
+                .setTitle("Sign Out")
+                .setMessage("Are you sure you want to sign out?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    // User clicked "Yes" - perform sign out
+                    performSignOut();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> {
+                    // User clicked "Cancel" - just close the dialog
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
+    /**
+     * Perform Firebase sign out
+     */
+    private void performSignOut() {
+        // Sign out from Firebase
+        if (mAuth != null) {
+            mAuth.signOut();
+        }
+
+        // Show success message
+        Toast.makeText(this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+
+        // Navigate to login screen
+        navigateToLogin();
+    }
+
+    /**
+     * Navigate to login screen
+     */
+    private void navigateToLogin() {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
      * Set greeting text with username from login
      */
     private void setUserGreeting() {
@@ -181,12 +345,6 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Handle user profile icon click
-     *
-     * WHAT THIS DOES:
-     * 1. Creates an Intent (like a message) to open the UserProfileActivity
-     * 2. Extracts the username from the greeting text ("Hi, Username")
-     * 3. Passes the username to the User Information screen
-     * 4. Starts the new activity (opens the User Information screen)
      */
     private void handleUserProfileClick() {
         // Create Intent to navigate to User Information screen
@@ -210,19 +368,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void handleNotificationClick() {
         Toast.makeText(this, "Notifications screen coming soon!", Toast.LENGTH_SHORT).show();
-
-        // TODO: Navigate to notifications screen
-        // Intent intent = new Intent(MainActivity.this, NotificationsActivity.class);
-        // startActivity(intent);
-    }
-
-    /**
-     * Handle menu icon click
-     */
-    private void handleMenuClick() {
-        Toast.makeText(this, "Menu opened!", Toast.LENGTH_SHORT).show();
-
-        // TODO: Open navigation drawer or menu
     }
 
     /**
@@ -234,11 +379,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter something to search", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Searching for: " + searchQuery, Toast.LENGTH_SHORT).show();
-
-            // TODO: Implement actual search functionality
-            // - Filter news cards based on search query
-            // - Navigate to search results screen
-            // - Connect to backend search API
         }
     }
 
@@ -257,27 +397,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void handleTabClick(String tabName) {
         Toast.makeText(this, tabName + " section coming soon!", Toast.LENGTH_SHORT).show();
-
-        // TODO: Navigate to specific category screens
-        // switch (tabName) {
-        //     case "Sport":
-        //         Intent sportIntent = new Intent(MainActivity.this, SportActivity.class);
-        //         startActivity(sportIntent);
-        //         break;
-        //     case "Education":
-        //         Intent educationIntent = new Intent(MainActivity.this, EducationActivity.class);
-        //         startActivity(educationIntent);
-        //         break;
-        //     case "Event":
-        //         Intent eventIntent = new Intent(MainActivity.this, EventActivity.class);
-        //         startActivity(intent);
-        //         break;
-        // }
     }
 
     /**
      * Method to update greeting text with username
-     * Call this method after successful login
      */
     public void setUserGreeting(String username) {
         if (username != null && !username.isEmpty()) {
